@@ -1,8 +1,11 @@
 # Setup
-Clone this repository.
+
+## Clone this repository.
 ```bash
 $ git clone https://github.com/Sarita-Dangi-Internship/todo-react-app-with-json-server.git
-Install dependencies. Make sure you already have `nodejs`, `npm` or `yarn` installed in your system.
+```
+## Install dependencies.
+Make sure you already have `nodejs`, `npm` or `yarn` installed in your system.
 ```bash
 $ npm install or yarn
 ```
