@@ -26,8 +26,8 @@ export default class CheckListItem extends Component {
   };
 
   render() {
-    const { task, createdDate, completed } = this.props.item;
-    const { handleOnDelete, index, toggleTaskCompleted } = this.props;
+    const { task, createdDate, completed, id } = this.props.item;
+    const { handleOnDelete, toggleTaskCompleted } = this.props;
     const { isEditMode } = this.state;
     return (
       <>
@@ -35,14 +35,14 @@ export default class CheckListItem extends Component {
           {!isEditMode ? (
             <>
               <div className="form-group">
-                <label className="styled-checkbox" htmlFor={index}>
+                <label className="styled-checkbox" htmlFor={id}>
                   {task || "Buy groceries for next week"}
                   <input
                     type="checkbox"
-                    id={index}
+                    id={id}
                     value="item1"
                     defaultChecked={completed}
-                    onChange={() => toggleTaskCompleted(index)}
+                    // onChange={() => toggleTaskCompleted(index)}
                   />
                   <span className="checkmark"></span>
                 </label>
@@ -50,16 +50,16 @@ export default class CheckListItem extends Component {
               <div className="icons-group">
                 <i
                   className="fas fa-pen icon icon-pen tooltip"
-                  onClick={() => {
-                    this.handleOnEdit(index);
-                  }}
+                  // onClick={() => {
+                  //   this.handleOnEdit(index);
+                  // }}
                 >
                   <span className="tooltiptext">Edit todo</span>
                 </i>
                 <i
                   className="fas fa-trash-alt icon icon-trash tooltip "
                   onClick={() => {
-                    handleOnDelete(index);
+                    handleOnDelete(id);
                   }}
                 >
                   <span className="tooltiptext">Delete todo</span>
@@ -76,36 +76,36 @@ export default class CheckListItem extends Component {
             <>
               {" "}
               <div className="form-group">
-                <label className="styled-checkbox" htmlFor={index}>
-                  <input type="checkbox" id={index} value="item3" />
+                <label className="styled-checkbox" htmlFor={id}>
+                  <input type="checkbox" id={id} value="item3" />
                   <span className="checkmark"></span>
                 </label>
                 <input
                   type="text"
                   className="edit-input"
-                  defaultValue={task}
-                  onChange={this.handleOnChange}
+                  // defaultValue={task}
+                  // onChange={this.handleOnChange}
                 />
               </div>
               <div className="icons-group">
                 <i
                   className="fas fa-check icon icon-pen tooltip"
-                  onClick={() => {
-                    this.handleOnSave(index);
-                  }}
+                  // onClick={() => {
+                  //   this.handleOnSave(index);
+                  // }}
                 >
                   <span className="tooltiptext">Save todo</span>
                 </i>
                 <i
                   className="fas fa-times icon icon-trash tooltip"
-                  onClick={() => this.handleOnCancel(index)}
+                  // onClick={() => this.handleOnCancel(index)}
                 >
                   <span className="tooltiptext">Cancel edit</span>
                 </i>
                 <i
                   className="fas fa-trash-alt icon icon-trash tooltip"
                   onClick={() => {
-                    handleOnDelete(index);
+                    handleOnDelete(id);
                   }}
                 >
                   <span className="tooltiptext">Delete todo</span>

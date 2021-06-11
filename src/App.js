@@ -4,6 +4,8 @@ import AddNewInput from "./components/AddNewInput";
 import Filter from "./components/FilterSortItems";
 import CheckListItem from "./components/CheckListItem";
 import React, { Component } from "react";
+import http from "./utils/http";
+import axios from "axios";
 
 const FILTER_MAP = {
   All: () => true,
@@ -13,6 +15,9 @@ const FILTER_MAP = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
+const api = axios.create({
+  baseURL: "http://localhost:3004",
+});
 export default class App extends Component {
   state = {
     newTodo: "",
@@ -22,87 +27,110 @@ export default class App extends Component {
     isOldestFirst: true,
     sortBy: "addedDate",
     sortAsc: true,
-    items: [
-      {
-        task: "go to shopping",
-        createdDate: "2021-3-27",
-        completed: true,
-      },
-    ],
+    items: [],
+  };
+
+  componentDidMount() {
+    this.fetchTasks();
+  }
+  /**
+   * to get list of tasks
+   */
+  fetchTasks = async () => {
+    const { data: response } = await api.get("/todoitems");
+
+    console.log("res", response);
+    this.setState({ items: response });
   };
 
   handleOnChange = (event) => {
     this.setState({ newTodo: event.target.value });
   };
   handleDate = (date) => {
-    // this.setState({ createdDate: date.toDateString() });
     this.setState({
       createdDate: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
     });
   };
 
-  handleOnSubmit = (event) => {
+  handleOnSubmit = async (event) => {
     event.preventDefault();
-    this.setState({
-      items: [
-        ...this.state.items,
-        {
-          task: this.state.newTodo,
-          createdDate: this.state.createdDate,
-          completed: this.state.completed,
-        },
-      ],
+    const response = await api.post("/todoitems", {
+      task: this.state.newTodo,
+      createdDate: this.state.createdDate,
+      completed: this.state.completed,
     });
+    console.log("post", response);
     this.setState({
       newTodo: "",
       createdDate: new Date(),
     });
+    this.fetchTasks();
+
+    // this.setState({
+    //   items: [
+    //     ...this.state.items,
+    //     {
+    //       task: this.state.newTodo,
+    //       createdDate: this.state.createdDate,
+    //       completed: this.state.completed,
+    //     },
+    //   ],
+    // });
+    // this.setState({
+    //   newTodo: "",
+    //   createdDate: new Date(),
+    // });
+    // console.log(this.state.items);
   };
 
-  handleOnDelete = (index) => {
-    const items = this.state.items.filter((item, index) => index !== index);
-    this.setState({ items: items });
+  handleOnDelete = async(id) => {
+    const items = await api.delete(`/todoitems/${id}`);
+    console.log("delete", items);
+    this.fetchTasks();
+
+    // const items = this.state.items.filter((item, index) => index !== index);
+    // this.setState({ items: items });
   };
 
-  handleOnFilter = (event) => {
-    this.setState({ filter: event.target.value });
-  };
+  // handleOnFilter = (event) => {
+  //   this.setState({ filter: event.target.value });
+  // };
 
-  toggleTaskCompleted = (index) => {
-    const updatedItems = this.state.items.map((item, index) => {
-      if (index === index) {
-        return { ...item, completed: !item.completed };
-      }
-      return item;
-    });
-    this.setState({ items: updatedItems });
-  };
+  // toggleTaskCompleted = (index) => {
+  //   const updatedItems = this.state.items.map((item, index) => {
+  //     if (index === index) {
+  //       return { ...item, completed: !item.completed };
+  //     }
+  //     return item;
+  //   });
+  //   this.setState({ items: updatedItems });
+  // };
 
-  editTask = (index, newtask) => {
-    const editedTaskList = this.state.items.map((item, ind) => {
-      if (index === ind) {
-        return { ...item, task: newtask };
-      }
-      return item;
-    });
-    this.setState({ items: editedTaskList });
-  };
+  // editTask = (index, newtask) => {
+  //   const editedTaskList = this.state.items.map((item, ind) => {
+  //     if (index === ind) {
+  //       return { ...item, task: newtask };
+  //     }
+  //     return item;
+  //   });
+  //   this.setState({ items: editedTaskList });
+  // };
 
-  handleChangeOnSort = (sortBy) => {
-    const { items } = this.state;
-    console.log("sort", sortBy);
-    let sortedItems = items;
-    const sorted = sortedItems.sort(
-      (d1, d2) =>
-        new Date(new Date(d2.createdDate)) - new Date(new Date(d1.createdDate))
-    );
-    this.setState({ sortBy });
-  };
+  // handleChangeOnSort = (sortBy) => {
+  //   const { items } = this.state;
+  //   console.log("sort", sortBy);
+  //   let sortedItems = items;
+  //   const sorted = sortedItems.sort(
+  //     (d1, d2) =>
+  //       new Date(new Date(d2.createdDate)) - new Date(new Date(d1.createdDate))
+  //   );
+  //   this.setState({ sortBy });
+  // };
 
-  toggleSortAsc = () => {
-    this.setState({ sortAsc: !this.state.sortAsc });
-    console.log("toggle", this.state.sortAsc);
-  };
+  // toggleSortAsc = () => {
+  //   this.setState({ sortAsc: !this.state.sortAsc });
+  //   console.log("toggle", this.state.sortAsc);
+  // };
 
   render() {
     return (
@@ -115,18 +143,18 @@ export default class App extends Component {
             handleOnSubmit={this.handleOnSubmit}
             handleDate={this.handleDate}
           />
-          <Filter
+          {/* <Filter
             filterNames={FILTER_NAMES}
             filter={this.state.filter}
             handleOnFilter={this.handleOnFilter}
             handleChangeOnSort={this.handleChangeOnSort}
             handleOnSort={this.sortByDate}
             toggleSortAsc={this.toggleSortAsc}
-          />
+          /> */}
 
           <div className="main-container__checklist-items">
             <form>
-              {this.state.items
+              {/* {this.state.items
                 .filter(FILTER_MAP[this.state.filter])
                 .map((item, index) => (
                   <CheckListItem
@@ -138,7 +166,16 @@ export default class App extends Component {
                     handleOnDelete={this.handleOnDelete}
                     editTask={this.editTask}
                   />
-                ))}
+                ))} */}
+
+              {this.state.items.map((item) => (
+                <CheckListItem
+                  key={item.id}
+                  item={item}
+                  completed={item.completed}
+                  handleOnDelete={this.handleOnDelete}
+                />
+              ))}
             </form>
           </div>
         </div>
