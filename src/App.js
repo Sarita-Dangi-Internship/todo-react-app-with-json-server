@@ -15,9 +15,6 @@ const FILTER_MAP = {
 
 const FILTER_NAMES = Object.keys(FILTER_MAP);
 
-const api = axios.create({
-  baseURL: "http://localhost:3004",
-});
 export default class App extends Component {
   state = {
     newTodo: "",
@@ -33,12 +30,13 @@ export default class App extends Component {
   componentDidMount() {
     this.fetchTasks();
   }
+  
   /**
-   * to get list of tasks
+   * Function to get list of tasks
    */
   fetchTasks = async () => {
     try {
-      const { data: response } = await api.get("/todoitems");
+      const { data: response } = await http.get("/todoitems");
       console.log("res", response);
       this.setState({ items: response });
     } catch (error) {
@@ -46,19 +44,31 @@ export default class App extends Component {
     }
   };
 
+  /**
+   * Function to get value when new task add
+   */
   handleOnChange = (event) => {
     this.setState({ newTodo: event.target.value });
   };
+
+  /**
+   * Function to get created data
+   * @param {*} date
+   */
   handleDate = (date) => {
     this.setState({
       createdDate: `${date.getFullYear()}-${date.getMonth()}-${date.getDate()}`,
     });
   };
 
+  /**
+   * Function to create new task
+   * @param {*} event
+   */
   handleOnSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await api.post("/todoitems", {
+      const response = await http.post("/todoitems", {
         task: this.state.newTodo,
         createdDate: this.state.createdDate,
         completed: this.state.completed,
@@ -72,58 +82,50 @@ export default class App extends Component {
     } catch (error) {
       console.log(error);
     }
-    // this.setState({
-    //   items: [
-    //     ...this.state.items,
-    //     {
-    //       task: this.state.newTodo,
-    //       createdDate: this.state.createdDate,
-    //       completed: this.state.completed,
-    //     },
-    //   ],
-    // });
-    // this.setState({
-    //   newTodo: "",
-    //   createdDate: new Date(),
-    // });
-    // console.log(this.state.items);
   };
 
+  /**
+   *  Function to delete task
+   * @param {*} id
+   */
   handleOnDelete = async (id) => {
     try {
-      const items = await api.delete(`/todoitems/${id}`);
+      const items = await http.delete(`/todoitems/${id}`);
       console.log("delete", items);
       this.fetchTasks();
     } catch (error) {
       console.log(error);
     }
-
-    // const items = this.state.items.filter((item, index) => index !== index);
-    // this.setState({ items: items });
   };
 
+  /**
+   *  Function to edit task
+   * @param {*} id
+   * @param {*} newtask
+   */
   editTask = async (id, newtask) => {
-    const editedTaskList = await api.patch(`/todoitems/${id}`, {
+    const editedTaskList = await http.patch(`/todoitems/${id}`, {
       task: newtask,
     });
     console.log("edit", editedTaskList);
     this.fetchTasks();
-    // const editedTaskList = this.state.items.map((item, ind) => {
-    //   if (id === ind) {
-    //     return { ...item, task: newtask };
-    //   }
-    //   return item;
-    // });
-    // this.setState({ items: editedTaskList });
   };
 
+  /**
+   * Function to take filter type from selected option
+   * @param {*} event
+   */
   handleOnFilter = (event) => {
     this.setState({ filter: event.target.value });
   };
 
+  /**
+   * Function to update checkbox for completed task
+   * @param {*} id
+   */
   toggleTaskCompleted = (id) => {
     const updatedItems = this.state.items.map((item) => {
-      if (id=== item.id) {
+      if (id === item.id) {
         return { ...item, completed: !item.completed };
       }
       return item;
@@ -131,6 +133,10 @@ export default class App extends Component {
     this.setState({ items: updatedItems });
   };
 
+  /**
+   * Function to sort list by due-date
+   * @param {*} sortBy
+   */
   handleChangeOnSort = (sortBy) => {
     const { items } = this.state;
     console.log("sort", sortBy);
@@ -142,6 +148,9 @@ export default class App extends Component {
     this.setState({ sortBy });
   };
 
+  /**
+   * Function to toggle asc and dec
+   */
   toggleSortAsc = () => {
     this.setState({ sortAsc: !this.state.sortAsc });
     console.log("toggle", this.state.sortAsc);
@@ -169,20 +178,6 @@ export default class App extends Component {
 
           <div className="main-container__checklist-items">
             <form>
-              {/* {this.state.items
-                .filter(FILTER_MAP[this.state.filter])
-                .map((item, index) => (
-                  <CheckListItem
-                    key={index}
-                    item={item}
-                    index={index}
-                    completed={item.completed}
-                    toggleTaskCompleted={this.toggleTaskCompleted}
-                    handleOnDelete={this.handleOnDelete}
-                    editTask={this.editTask}
-                  />
-                ))} */}
-
               {this.state.items
                 .filter(FILTER_MAP[this.state.filter])
                 .map((item) => (
