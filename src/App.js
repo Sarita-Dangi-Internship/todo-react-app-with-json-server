@@ -27,7 +27,7 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    this.fetchTask();
+    this.fetchTasks();
   };
 
   /**
@@ -36,7 +36,7 @@ export default class App extends Component {
   fetchTasks = async () => {
     try {
       const { data: response } = await http.get("/todoitems");
-      console.log("res", response);
+      
       this.setState({ items: response });
     } catch (error) {
       console.log(error);
@@ -45,7 +45,7 @@ export default class App extends Component {
 
 // fetchTasks = async () => {
 //   try {
-//     const response = fetchTask();
+//     const response = todoService.fetchTask();
 //     console.log("res", response);
 //   }
 //   catch (error) {
@@ -83,7 +83,6 @@ export default class App extends Component {
         createdDate: this.state.createdDate,
         completed: this.state.completed,
       });
-      console.log("post", response);
       this.setState({
         newTodo: "",
         createdDate: new Date(),
@@ -101,7 +100,6 @@ export default class App extends Component {
   handleOnDelete = async (id) => {
     try {
       const items = await http.delete(`/todoitems/${id}`);
-      console.log("delete", items);
       this.fetchTasks();
     } catch (error) {
       console.log(error);
@@ -117,7 +115,6 @@ export default class App extends Component {
     const editedTaskList = await http.patch(`/todoitems/${id}`, {
       task: newtask,
     });
-    console.log("edit", editedTaskList);
     this.fetchTasks();
   };
 
@@ -149,7 +146,6 @@ export default class App extends Component {
    */
   handleChangeOnSort = (sortBy) => {
     const { items } = this.state;
-    console.log("sort", sortBy);
     let sortedItems = items;
     const sorted = sortedItems.sort(
       (d1, d2) =>
@@ -163,7 +159,6 @@ export default class App extends Component {
    */
   toggleSortAsc = () => {
     this.setState({ sortAsc: !this.state.sortAsc });
-    console.log("toggle", this.state.sortAsc);
   };
 
   render() {
