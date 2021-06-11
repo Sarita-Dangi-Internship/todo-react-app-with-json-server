@@ -5,9 +5,8 @@ import Filter from "./components/FilterSortItems";
 import CheckListItem from "./components/CheckListItem";
 import React, { Component } from "react";
 import http from "./utils/http";
-import axios from "axios";
-
-const FILTER_MAP = {
+import * as todoService from "./services/todolist";
+const FILTER_MAP = { 
   All: () => true,
   Active: (task) => !task.completed,
   Completed: (task) => task.completed,
@@ -28,21 +27,32 @@ export default class App extends Component {
   };
 
   componentDidMount() {
-    this.fetchTasks();
-  }
-  
+    this.fetchTask();
+  };
+
   /**
    * Function to get list of tasks
    */
-  fetchTasks = async () => {
-    try {
-      const { data: response } = await http.get("/todoitems");
-      console.log("res", response);
-      this.setState({ items: response });
-    } catch (error) {
-      console.log(error);
-    }
-  };
+  // fetchTasks = async () => {
+  //   try {
+  //     const { data: response } = await http.get("/todoitems");
+  //     console.log("res", response);
+  //     this.setState({ items: response });
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
+
+fetchTasks = async () => {
+  try {
+    const response = fetchTask();
+    console.log("res", response);
+  }
+  catch (error) {
+    console.log("error");
+  }
+};
+
 
   /**
    * Function to get value when new task add
