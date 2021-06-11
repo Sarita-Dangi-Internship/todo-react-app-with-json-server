@@ -33,25 +33,25 @@ export default class App extends Component {
   /**
    * Function to get list of tasks
    */
-  // fetchTasks = async () => {
-  //   try {
-  //     const { data: response } = await http.get("/todoitems");
-  //     console.log("res", response);
-  //     this.setState({ items: response });
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+  fetchTasks = async () => {
+    try {
+      const { data: response } = await http.get("/todoitems");
+      console.log("res", response);
+      this.setState({ items: response });
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
-fetchTasks = async () => {
-  try {
-    const response = fetchTask();
-    console.log("res", response);
-  }
-  catch (error) {
-    console.log("error");
-  }
-};
+// fetchTasks = async () => {
+//   try {
+//     const response = fetchTask();
+//     console.log("res", response);
+//   }
+//   catch (error) {
+//     console.log("error");
+//   }
+// };
 
 
   /**
