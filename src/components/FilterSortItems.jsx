@@ -32,7 +32,7 @@ export default class FilterSortItems extends Component {
               className="select"
               onChange={(e) => this.props.handleChangeOnSort(e.target.value)}
             >
-              <option value="addedDate">Added date</option>
+              <option value="defaultDate">Default</option>
               <option value="dueDate">Due date</option>
             </select>
             <i

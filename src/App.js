@@ -117,35 +117,35 @@ export default class App extends Component {
     // this.setState({ items: editedTaskList });
   };
 
-  // handleOnFilter = (event) => {
-  //   this.setState({ filter: event.target.value });
-  // };
+  handleOnFilter = (event) => {
+    this.setState({ filter: event.target.value });
+  };
 
-  // toggleTaskCompleted = (id) => {
-  //   const updatedItems = this.state.items.map((item, id) => {
-  //     if (index === index) {
-  //       return { ...item, completed: !item.completed };
-  //     }
-  //     return item;
-  //   });
-  //   this.setState({ items: updatedItems });
-  // };
+  toggleTaskCompleted = (id) => {
+    const updatedItems = this.state.items.map((item) => {
+      if (id=== item.id) {
+        return { ...item, completed: !item.completed };
+      }
+      return item;
+    });
+    this.setState({ items: updatedItems });
+  };
 
-  // handleChangeOnSort = (sortBy) => {
-  //   const { items } = this.state;
-  //   console.log("sort", sortBy);
-  //   let sortedItems = items;
-  //   const sorted = sortedItems.sort(
-  //     (d1, d2) =>
-  //       new Date(new Date(d2.createdDate)) - new Date(new Date(d1.createdDate))
-  //   );
-  //   this.setState({ sortBy });
-  // };
+  handleChangeOnSort = (sortBy) => {
+    const { items } = this.state;
+    console.log("sort", sortBy);
+    let sortedItems = items;
+    const sorted = sortedItems.sort(
+      (d1, d2) =>
+        new Date(new Date(d2.createdDate)) - new Date(new Date(d1.createdDate))
+    );
+    this.setState({ sortBy });
+  };
 
-  // toggleSortAsc = () => {
-  //   this.setState({ sortAsc: !this.state.sortAsc });
-  //   console.log("toggle", this.state.sortAsc);
-  // };
+  toggleSortAsc = () => {
+    this.setState({ sortAsc: !this.state.sortAsc });
+    console.log("toggle", this.state.sortAsc);
+  };
 
   render() {
     return (
@@ -158,14 +158,14 @@ export default class App extends Component {
             handleOnSubmit={this.handleOnSubmit}
             handleDate={this.handleDate}
           />
-          {/* <Filter
+          <Filter
             filterNames={FILTER_NAMES}
             filter={this.state.filter}
             handleOnFilter={this.handleOnFilter}
             handleChangeOnSort={this.handleChangeOnSort}
             handleOnSort={this.sortByDate}
             toggleSortAsc={this.toggleSortAsc}
-          /> */}
+          />
 
           <div className="main-container__checklist-items">
             <form>
@@ -183,16 +183,18 @@ export default class App extends Component {
                   />
                 ))} */}
 
-              {this.state.items.map((item) => (
-                <CheckListItem
-                  key={item.id}
-                  item={item}
-                  completed={item.completed}
-                  handleOnDelete={this.handleOnDelete}
-                  editTask={this.editTask}
-                  toggleTaskCompleted={this.toggleTaskCompleted}
-                />
-              ))}
+              {this.state.items
+                .filter(FILTER_MAP[this.state.filter])
+                .map((item) => (
+                  <CheckListItem
+                    key={item.id}
+                    item={item}
+                    completed={item.completed}
+                    handleOnDelete={this.handleOnDelete}
+                    editTask={this.editTask}
+                    toggleTaskCompleted={this.toggleTaskCompleted}
+                  />
+                ))}
             </form>
           </div>
         </div>
