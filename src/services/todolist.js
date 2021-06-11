@@ -36,9 +36,9 @@ export async function addNewTask(data){
  * @param {*} data
  * @return {*} 
  */
-export async function deletetaskId(taskId, data){ 
+export async function deletetaskId(taskId){ 
     const url = `${api.endpoints.todo}/${taskId}`;
-    const response = await http.delete(url, data);
+    const response = await http.delete(url);
     
     return response;
 };

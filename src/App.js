@@ -45,7 +45,7 @@ export default class App extends Component {
 
 // fetchTasks = async () => {
 //   try {
-//     const response = todoService.fetchTask();
+//     const response = await todoService.fetchTask();
 //     console.log("res", response);
 //   }
 //   catch (error) {
@@ -78,7 +78,7 @@ export default class App extends Component {
   handleOnSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await http.post("/todoitems", {
+      const response = await todoService.addNewTask({
         task: this.state.newTodo,
         createdDate: this.state.createdDate,
         completed: this.state.completed,
@@ -99,7 +99,7 @@ export default class App extends Component {
    */
   handleOnDelete = async (id) => {
     try {
-      const items = await http.delete(`/todoitems/${id}`);
+      const items = await todoService.deletetaskId(id);
       this.fetchTasks();
     } catch (error) {
       console.log(error);
@@ -112,7 +112,7 @@ export default class App extends Component {
    * @param {*} newtask
    */
   editTask = async (id, newtask) => {
-    const editedTaskList = await http.patch(`/todoitems/${id}`, {
+    const editedTaskList = await todoService.editTaskById(id, {
       task: newtask,
     });
     this.fetchTasks();

@@ -1,10 +1,10 @@
 const config = {
   api: {
     endpoints: {
-      todo: " /todoitems",
+      todo: "/todoitems",
     },
   },
-  baseURI: " http://localhost:3004",
+  baseURI: "http://localhost:3004",
 };
 
 export default config;
