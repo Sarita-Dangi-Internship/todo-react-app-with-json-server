@@ -37,10 +37,13 @@ export default class App extends Component {
    * to get list of tasks
    */
   fetchTasks = async () => {
-    const { data: response } = await api.get("/todoitems");
-
-    console.log("res", response);
-    this.setState({ items: response });
+    try {
+      const { data: response } = await api.get("/todoitems");
+      console.log("res", response);
+      this.setState({ items: response });
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   handleOnChange = (event) => {
@@ -54,18 +57,21 @@ export default class App extends Component {
 
   handleOnSubmit = async (event) => {
     event.preventDefault();
-    const response = await api.post("/todoitems", {
-      task: this.state.newTodo,
-      createdDate: this.state.createdDate,
-      completed: this.state.completed,
-    });
-    console.log("post", response);
-    this.setState({
-      newTodo: "",
-      createdDate: new Date(),
-    });
-    this.fetchTasks();
-
+    try {
+      const response = await api.post("/todoitems", {
+        task: this.state.newTodo,
+        createdDate: this.state.createdDate,
+        completed: this.state.completed,
+      });
+      console.log("post", response);
+      this.setState({
+        newTodo: "",
+        createdDate: new Date(),
+      });
+      this.fetchTasks();
+    } catch (error) {
+      console.log(error);
+    }
     // this.setState({
     //   items: [
     //     ...this.state.items,
@@ -83,37 +89,46 @@ export default class App extends Component {
     // console.log(this.state.items);
   };
 
-  handleOnDelete = async(id) => {
-    const items = await api.delete(`/todoitems/${id}`);
-    console.log("delete", items);
-    this.fetchTasks();
+  handleOnDelete = async (id) => {
+    try {
+      const items = await api.delete(`/todoitems/${id}`);
+      console.log("delete", items);
+      this.fetchTasks();
+    } catch (error) {
+      console.log(error);
+    }
 
     // const items = this.state.items.filter((item, index) => index !== index);
     // this.setState({ items: items });
+  };
+
+  editTask = async (id, newtask) => {
+    const editedTaskList = await api.patch(`/todoitems/${id}`, {
+      task: newtask,
+    });
+    console.log("edit", editedTaskList);
+    this.fetchTasks();
+    // const editedTaskList = this.state.items.map((item, ind) => {
+    //   if (id === ind) {
+    //     return { ...item, task: newtask };
+    //   }
+    //   return item;
+    // });
+    // this.setState({ items: editedTaskList });
   };
 
   // handleOnFilter = (event) => {
   //   this.setState({ filter: event.target.value });
   // };
 
-  // toggleTaskCompleted = (index) => {
-  //   const updatedItems = this.state.items.map((item, index) => {
+  // toggleTaskCompleted = (id) => {
+  //   const updatedItems = this.state.items.map((item, id) => {
   //     if (index === index) {
   //       return { ...item, completed: !item.completed };
   //     }
   //     return item;
   //   });
   //   this.setState({ items: updatedItems });
-  // };
-
-  // editTask = (index, newtask) => {
-  //   const editedTaskList = this.state.items.map((item, ind) => {
-  //     if (index === ind) {
-  //       return { ...item, task: newtask };
-  //     }
-  //     return item;
-  //   });
-  //   this.setState({ items: editedTaskList });
   // };
 
   // handleChangeOnSort = (sortBy) => {
@@ -174,6 +189,8 @@ export default class App extends Component {
                   item={item}
                   completed={item.completed}
                   handleOnDelete={this.handleOnDelete}
+                  editTask={this.editTask}
+                  toggleTaskCompleted={this.toggleTaskCompleted}
                 />
               ))}
             </form>

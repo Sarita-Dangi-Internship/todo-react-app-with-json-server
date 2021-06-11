@@ -19,8 +19,8 @@ export default class CheckListItem extends Component {
     this.setState({ newTodo: event.target.value });
     console.log("edit", this.state.newTodo);
   };
-  handleOnSave = (index) => {
-    this.props.editTask(this.props.index, this.state.newTodo);
+  handleOnSave = (id) => {
+    this.props.editTask(this.props.item.id, this.state.newTodo);
     this.setState({ newTodo: "" });
     this.setState({ isEditMode: false });
   };
@@ -42,7 +42,7 @@ export default class CheckListItem extends Component {
                     id={id}
                     value="item1"
                     defaultChecked={completed}
-                    // onChange={() => toggleTaskCompleted(index)}
+                    onChange={() => toggleTaskCompleted(id)}
                   />
                   <span className="checkmark"></span>
                 </label>
@@ -50,9 +50,9 @@ export default class CheckListItem extends Component {
               <div className="icons-group">
                 <i
                   className="fas fa-pen icon icon-pen tooltip"
-                  // onClick={() => {
-                  //   this.handleOnEdit(index);
-                  // }}
+                  onClick={() => {
+                    this.handleOnEdit(id);
+                  }}
                 >
                   <span className="tooltiptext">Edit todo</span>
                 </i>
@@ -83,22 +83,22 @@ export default class CheckListItem extends Component {
                 <input
                   type="text"
                   className="edit-input"
-                  // defaultValue={task}
-                  // onChange={this.handleOnChange}
+                  defaultValue={task}
+                  onChange={this.handleOnChange}
                 />
               </div>
               <div className="icons-group">
                 <i
                   className="fas fa-check icon icon-pen tooltip"
-                  // onClick={() => {
-                  //   this.handleOnSave(index);
-                  // }}
+                  onClick={() => {
+                    this.handleOnSave(id);
+                  }}
                 >
                   <span className="tooltiptext">Save todo</span>
                 </i>
                 <i
                   className="fas fa-times icon icon-trash tooltip"
-                  // onClick={() => this.handleOnCancel(index)}
+                  onClick={() => this.handleOnCancel(id)}
                 >
                   <span className="tooltiptext">Cancel edit</span>
                 </i>
