@@ -6,7 +6,7 @@ import CheckListItem from "./components/CheckListItem";
 import React, { Component } from "react";
 import http from "./utils/http";
 import * as todoService from "./services/todolist";
-const FILTER_MAP = { 
+const FILTER_MAP = {
   All: () => true,
   Active: (task) => !task.completed,
   Completed: (task) => task.completed,
@@ -28,31 +28,19 @@ export default class App extends Component {
 
   componentDidMount() {
     this.fetchTasks();
-  };
+  }
 
   /**
    * Function to get list of tasks
    */
   fetchTasks = async () => {
     try {
-      const { data: response } = await http.get("/todoitems");
-      
-      this.setState({ items: response });
+      const response = await todoService.fetchTask();
+      this.setState({ items: response.data });
     } catch (error) {
-      console.log(error);
+      console.log("error");
     }
   };
-
-// fetchTasks = async () => {
-//   try {
-//     const response = await todoService.fetchTask();
-//     console.log("res", response);
-//   }
-//   catch (error) {
-//     console.log("error");
-//   }
-// };
-
 
   /**
    * Function to get value when new task add
