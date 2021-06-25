@@ -32,5 +32,5 @@ $ npm install -g json-server or yarn global add json-server
 ```
 ## Start JSON Server
 ```bash
-$ json-server --watch db.json
+$ json-server --watch data/db.json --port 3004
 ```
