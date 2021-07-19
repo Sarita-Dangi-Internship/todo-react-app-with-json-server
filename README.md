@@ -4,9 +4,8 @@
 ```bash
 $ git clone https://github.com/Sarita-Dangi-Internship/todo-react-app-with-json-server.git
 ```
-## Install dependencies. 
+## Install dependencies.
 Make sure you already have `nodejs`, `npm` or `yarn` installed in your system.
-
 ```bash
 $ npm install or yarn
 ```
@@ -33,5 +32,5 @@ $ npm install -g json-server or yarn global add json-server
 ```
 ## Start JSON Server
 ```bash
-$ json-server --watch db.json
+$ json-server --watch data/db.json --port 3004
 ```
